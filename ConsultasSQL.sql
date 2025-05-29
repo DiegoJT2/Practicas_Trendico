@@ -78,3 +78,32 @@ WHERE B.nombre = 'running' AND C.id_producto IS NULL;
  ALL).*/
 SELECT id_producto, nombre, precio, stock, id_categoria FROM productos WHERE stock < 10 UNION ALL
 SELECT id_producto, nombre, precio, stock, id_categoria FROM productos WHERE precio > (SELECT AVG(precio) FROM productos);
+
+/*1. Crear índices en campos de búsqueda frecuente(nombre, id_categoria, fecha_pedido).*/
+CREATE INDEX idx_nombre ON productos(nombre);
+CREATE INDEX idx_id_categoria ON categorias(id_categoria);
+CREATE INDEX idx_fecha_pedido ON pedidos(fecha_pedido);
+/*2. Reescribir una consulta usando EXISTS en lugar de IN para mejorar rendimiento.*/
+SELECT DISTINCT A.id_cliente, A.nombre, A.apellidos, A.email, A.telefono, A.fecha_registro FROM clientes AS A
+JOIN pedidos AS B ON A.id_cliente = B.id_cliente_fk JOIN detalles_pedido AS C ON B.id_pedido = C.id_pedido
+JOIN productos AS D ON C.id_producto = D.id_producto JOIN categorias AS E ON D.id_categoria = E.id_categoria
+WHERE E.nombre = 'running' AND EXISTS(SELECT 1 FROM pedidos AS B2 JOIN detalles_pedido AS C2 ON B2.id_pedido = C2.id_pedido
+JOIN productos AS D2 ON C2.id_producto = D2.id_producto JOIN categorias AS E2 ON D2.id_categoria = E2.id_categoria
+WHERE E2.nombre = 'fitness' AND B2.id_cliente_fk = A.id_cliente);
+/*3. Evitar SELECT * y especificar solo columnas necesarias.*/
+SELECT id_producto, nombre, descripcion, precio, stock, marca FROM productos;
+/*4. Comparar dos versiones de una consulta(con JOIN vs. subconsulta) y analizar cuál es más eficiente.*/
+EXPLAIN
+SELECT p.nombre, c.nombre AS categoria
+FROM Productos p
+JOIN Categorias c ON p.id_categoria = c.id_categoria;
+
+EXPLAIN
+SELECT nombre, 
+       (SELECT nombre FROM Categorias WHERE id_categoria = p.id_categoria) AS categoria
+FROM Productos p;
+
+EXPLAIN FORMAT=JSON 
+SELECT p.nombre, c.nombre AS categoria
+FROM Productos p
+JOIN Categorias c ON p.id_categoria = c.id_categoria;
