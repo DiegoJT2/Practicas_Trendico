@@ -102,8 +102,7 @@ EXPLAIN
 SELECT nombre, 
        (SELECT nombre FROM Categorias WHERE id_categoria = p.id_categoria) AS categoria
 FROM Productos p;
-
-EXPLAIN FORMAT=JSON 
-SELECT p.nombre, c.nombre AS categoria
-FROM Productos p
-JOIN Categorias c ON p.id_categoria = c.id_categoria;
+/*La que utiliza JOIN es más eficiente*/
+/*5. Usar EXPLAIN ANALYZE para evaluar el rendimiento de una consulta compleja.*/
+EXPLAIN SELECT A.nombre, B.nombre AS categoria
+FROM Productos A JOIN categorias B ON A.id_categoria = B.id_categoria;
