@@ -123,8 +123,8 @@ VALUES (@nuevo_pedido_id, 2, 1, 129.99);
 INSERT INTO detalles_pedido (id_pedido, id_producto, cantidad, precio_unitario)
 VALUES (@nuevo_pedido_id, 5, 1, 24.99);
 
--- Validar si se insertaron filas en detalles_pedido antes de hacer el commit
-SET @filas_detalles = (SELECT COUNT(*) FROM detalles_pedido WHERE id_pedido = @nuevo_pedido_id);
+-- Verificar si la actualización afectó filas
+SET @filas_detalles = ROW_COUNT();
 
 -- Manejo del error en pasos separados
 SELECT CASE
