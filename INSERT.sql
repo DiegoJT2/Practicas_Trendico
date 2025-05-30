@@ -6,12 +6,9 @@ INSERT INTO categorias (nombre, descripcion) VALUES
 ('Natación', 'Bañadores, gafas y material para piscina'),
 ('Ciclismo', 'Bicicletas y componentes');
 -- Insertar productos
-INSERT INTO productos (nombre, descripcion, precio, stock, id_categoria, marca)
-VALUES
-('Zapatillas Run Fast', 'Zapatillas ligeras para corredores', 89.99, 50, 1,
-'Nike'),
-('Balón Adidas Champions', 'Balón oficial de la Champions League', 129.99, 30, 2,
-'Adidas'),
+INSERT INTO productos (nombre, descripcion, precio, stock, id_categoria, marca) VALUES
+('Zapatillas Run Fast', 'Zapatillas ligeras para corredores', 89.99, 50, 1, 'Nike'),
+('Balón Adidas Champions', 'Balón oficial de la Champions League', 129.99, 30, 2, 'Adidas'),
 ('Mancuernas 5kg', 'Par de mancuernas de neopreno', 29.99, 100, 3, 'Decathlon'),
 ('Gafas de Natación Speed', 'Gafas de competición', 24.99, 40, 4, 'Speedo'),
 ('Bicicleta MTB Pro', 'Bicicleta montaña 21 velocidades', 599.99, 15, 5, 'Trek');
@@ -26,8 +23,7 @@ INSERT INTO pedidos (id_cliente, estado, total, metodo_pago) VALUES
 (2, 'procesado', 59.98, 'paypal'),
 (3, 'pendiente', 599.99, 'transferencia');
 -- Insertar detalles de pedido
-INSERT INTO detalles_pedido (id_pedido, id_producto, cantidad, precio_unitario)
-VALUES
+INSERT INTO detalles_pedido (id_pedido, id_producto, cantidad, precio_unitario) VALUES
 (1, 1, 1, 89.99), -- Pedido 1: Zapatillas Run Fast
 (1, 3, 1, 29.99), -- Pedido 1: Mancuernas 5kg
 (2, 4, 2, 24.99), -- Pedido 2: 2x Gafas de Natación
