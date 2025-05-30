@@ -81,7 +81,6 @@ BEGIN
                                                FROM pedidos 
                                                WHERE pedidos.id_cliente = clientes.id_cliente 
                                                AND pedidos.estado = 'entregado');
-
     -- Verificar si la actualización afectó filas
     IF ROW_COUNT() = 0 THEN
         -- Si hubo error, revertir los cambios
