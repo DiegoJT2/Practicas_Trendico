@@ -130,29 +130,8 @@ DELIMITER ;
 /*4. Ejercicios de SAVEPOINT
 
 1. Actualizar múltiples productos:*/
-START TRANSACTION;
-
--- Actualizar el primer producto
-UPDATE productos SET stock = stock + 5 WHERE id_producto = 2;
-
--- Crear SAVEPOINT
-SAVEPOINT sp_primer_producto;
-
--- Intentar actualizar el segundo producto
-UPDATE productos SET stock = stock + 5 WHERE id_producto = 5;
-
--- Verificar si la actualización del segundo producto afectó filas
-SET @filas_afectadas = ROW_COUNT();
-
--- Mostrar mensaje de validación
-SELECT CASE 
-    WHEN @filas_afectadas = 0 THEN 'Error: No se pudo actualizar el segundo producto.'
-    ELSE 'Productos actualizados correctamente.'
-END AS mensaje;
-
-/*1.Actualizar múltiples productos:*/
 DELIMITER //
-CREATE PROCEDURE actualizar_productos()
+CREATE PROCEDURE actualizar_multiples_productos()
 BEGIN
     -- Iniciar transacción
     START TRANSACTION;
