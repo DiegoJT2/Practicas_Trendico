@@ -6,6 +6,7 @@ DELETE FROM clientes;
 DELETE FROM productos;
 DELETE FROM categorias;
 COMMIT;
+/*Eliminado más rápido*/
 TRUNCATE TABLE detalles_pedido;
 TRUNCATE TABLE pedidos;
 TRUNCATE TABLE clientes;

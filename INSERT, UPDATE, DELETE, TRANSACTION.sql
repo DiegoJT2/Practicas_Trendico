@@ -1,7 +1,7 @@
 /*1. Ejercicios de INSERT, UPDATE y DELETE*/
 INSERT INTO categorias(nombre, descripcion) VALUES ('Tenis', 'Raquetas y calzado para tenis');
-INSERT INTO productos(nombre, descripcion, precio, stock, categoria, marca) VALUES ('Raqueta Pro Tour', 'Raqueta profesional para competición', 199.99, 20, 12, 'Wilson');
-INSERT INTO clientes(nombre, apellidos, email, telefono, fecha_registro, puntos_fidelidad) VALUES ('Laura', 'Fernández', 'laura@email.com', 644556677, '0000-00-00', 0);
+INSERT INTO productos(nombre, descripcion, precio, stock, id_categoria, marca, fecha_creacion) VALUES ('Raqueta Pro Tour', 'Raqueta profesional para competición', 199.99, 20, 6, 'Wilson', NOW());
+INSERT INTO clientes(nombre, apellidos, email, telefono, fecha_registro, puntos_fidelidad) VALUES ('Laura', 'Fernández', 'laura@email.com', 644556677, NOW(), 0);
 /*1. Actualizar el precio de las "Zapatillas Run Fast" a 79.99.*/
 UPDATE productos SET precio = 79.99 WHERE nombre = 'Zapatillas Run Fast';
 /*2. Incrementar el stock de todos los productos de la categoría "Fitness" en 10 unidades.*/
@@ -14,7 +14,7 @@ DELETE FROM productos WHERE stock < 5;
 DELETE FROM pedidos WHERE estado = 'canceled';
 /*3. Borrar clientes inactivos (sin pedidos registrados).*/
 DELETE FROM clientes WHERE id_cliente NOT IN (SELECT id_cliente FROM pedidos);
-
+	
 /*2. Ejercicios con TRANSACCIONES y ROLLBACK
 
 1. Realizar una compra con verificación de stock:*/
