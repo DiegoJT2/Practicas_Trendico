@@ -8,7 +8,7 @@ const productos = [
   {
       id: 2,
       nombre: "Balón Adidas Champions",
-      precio: 29.99,
+      precio: 129.99,
       imagen: "img/balon.jpg"
   },
   {
