@@ -56,7 +56,7 @@ function actualizarCarrito() {
     });
     $('#total').text(total.toFixed(2) + '€');
     // Actualiza el contador del icono del carrito
-    $('#icono-carrito span').text(cantidadTotal);
+    $('#contador-carrito').text(cantidadTotal);
 }
 
 function guardarEnCookies() {

@@ -7,9 +7,9 @@ const productos = [
   },
   {
       id: 2,
-      nombre: "Gorro de Adidas",
+      nombre: "Balón Adidas Champions",
       precio: 29.99,
-      imagen: "img/gorro.webp"
+      imagen: "img/balon.jpg"
   },
   {
     id: 3,
@@ -34,5 +34,11 @@ const productos = [
     nombre: "Camiseta Deportiva",
     precio: 24.99,
     imagen: "img/camiseta.webp"
-  }
+  },
+  {
+    id: 7,
+    nombre: "Gorro de Adidas",
+    precio: 29.99,
+    imagen: "img/gorro.webp"
+  },
 ];

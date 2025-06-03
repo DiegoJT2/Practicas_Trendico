@@ -11,14 +11,14 @@
 </head>
 <body>
     <header class="flex justify-between items-center p-4 bg-blue-600 text-white">
-        <div class="logo">
+        <div class="logo flex items-center gap-2">
+            <img src="img/logo.webp" alt="Logo SportShop" class="h-10 w-10 object-contain">
             <h1>SportShop Online</h1>
         </div>
         <div class="carrito">
-            <span>Carrito:</span>
-            <button id="icono-carrito" class="relative">
-                <span class="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2">0</span>
-                🛒
+            <button id="icono-carrito" class="relative flex items-center gap-2">
+                <span id="contador-carrito" class="bg-red-500 text-white rounded-full px-2 ml-1 flex items-center justify-center" style="min-width: 24px;">0</span>
+                <span class="text-2xl ml-1">🛒</span>
             </button>
         </div>
     </header>
