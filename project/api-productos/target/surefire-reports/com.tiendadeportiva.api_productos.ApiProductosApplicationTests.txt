@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.tiendadeportiva.api_productos.ApiProductosApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.173 s -- in com.tiendadeportiva.api_productos.ApiProductosApplicationTests
