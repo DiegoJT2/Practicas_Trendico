@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tienda Deportiva</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Productos</h1>
+    <div id="lista-productos"></div>
+
+    <script>
+        $(document).ready(function(){
+            $.get("http://localhost:8080/api/productos", function(data){
+                data.forEach(producto => {
+                    $("#lista-productos").append(`
+                        <div>
+                            <h3>${producto.nombre}</h3>
+                            <p>Precio: $${producto.precio}</p>
+                        </div>
+                    `);
+                });
+            });
+        });
+    </script>
+</html>
