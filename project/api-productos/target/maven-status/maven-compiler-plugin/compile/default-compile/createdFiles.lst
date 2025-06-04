@@ -1,6 +1,5 @@
 com\tiendadeportiva\controller\ProductoController.class
 com\tiendadeportiva\model\Categoria.class
 com\tiendadeportiva\repository\ProductoRepository.class
-com\tiendadeportiva\config
-com\tiendadeportiva\model\Producto.class
 com\tiendadeportiva\api_productos\ApiProductosApplication.class
+com\tiendadeportiva\model\Producto.class
