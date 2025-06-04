@@ -7,19 +7,19 @@
 <body>
     <h1>Productos</h1>
     <div id="lista-productos"></div>
-
     <script>
-        $(document).ready(function(){
-            $.get("http://localhost:8080/api/productos", function(data){
+        $(document).ready(function() {
+            $.get("http://localhost:8080/api/productos", function(data) {
                 data.forEach(producto => {
                     $("#lista-productos").append(`
                         <div>
                             <h3>${producto.nombre}</h3>
-                            <p>Precio: $${producto.precio}</p>
+                            <p>Precio: ${producto.precio}€</p>
                         </div>
                     `);
                 });
             });
         });
     </script>
+</body>
 </html>
