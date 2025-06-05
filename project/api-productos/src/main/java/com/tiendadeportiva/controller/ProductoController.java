@@ -12,28 +12,32 @@ import com.tiendadeportiva.repository.ProductoRepository;
 
 @RestController
 @RequestMapping("/api/productos")
-public class ProductoController{
+public class ProductoController {
 
     @Autowired
     private ProductoRepository productoRepository;
 
+    // Obtener todos los productos
     @GetMapping
-    public List<Producto> listarProductos(){
+    public List<Producto> listarProductos() {
         return productoRepository.findAll();
     }
 
+    // Crear un nuevo producto
     @PostMapping
-    public Producto crearProducto(@RequestBody Producto producto){
+    public Producto crearProducto(@RequestBody Producto producto) {
         return productoRepository.save(producto);
     }
+
+    // Actualizar el stock de un producto
     @PutMapping("/{id}/stock")
     public ResponseEntity<Producto> actualizarStock(
-        @PathVariable Long id,
-        @RequestBody Map<String, Integer> body
-    ){
+            @PathVariable Long id,
+            @RequestBody Map<String, Integer> body
+    ) {
         Producto producto = productoRepository.findById(id).orElseThrow();
         int nuevoStock = producto.getStock() + body.get("cantidad");
-        if(nuevoStock < 0){
+        if (nuevoStock < 0) {
             return ResponseEntity.badRequest().build();
         }
         producto.setStock(nuevoStock);

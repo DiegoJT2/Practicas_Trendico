@@ -1,4 +1,4 @@
-package com.tiendadeportiva.api_productos;
+package com.tiendadeportiva;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

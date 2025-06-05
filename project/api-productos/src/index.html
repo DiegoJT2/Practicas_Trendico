@@ -1,27 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Tienda Deportiva</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Productos</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
-    <h1>Productos</h1>
-    <div id="lista-productos"></div>
-    <script>
-        $(document).ready(function() {
-            $.get("http://localhost:8080/api/productos", function(data) {
-                data.forEach(producto => {
-                    $("#lista-productos").append(`
-                        <div>
-                            <h3>${producto.nombre}</h3>
-                            <p>Precio: ${producto.precio}€</p>
-                        </div>
-                    `);
-                });
-            });
+  <h1>Productos</h1>
+  <table id="productos-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Marca</th>
+        <th>Categoría</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    fetch('http://localhost:8080/api/productos')
+      .then(response => response.json())
+      .then(productos => {
+        const tbody = document.querySelector('#productos-table tbody');
+        productos.forEach(p => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${p.nombre}</td>
+            <td>${p.descripcion}</td>
+            <td>${p.precio}</td>
+            <td>${p.stock}</td>
+            <td>${p.marca}</td>
+            <td>${p.categoria?.nombre || 'Sin categoría'}</td>
+          `;
+          tbody.appendChild(tr);
         });
-    </script>
+      })
+      .catch(error => {
+        console.error('Error al cargar productos:', error);
+      });
+  </script>
 </body>
 </html>
