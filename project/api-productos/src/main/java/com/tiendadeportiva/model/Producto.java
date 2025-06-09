@@ -1,7 +1,6 @@
 package com.tiendadeportiva.model;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
@@ -13,7 +12,8 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_producto;
+    @Column(name = "id_producto")
+    private Long id;
 
     @NotBlank
     private String nombre;
@@ -30,29 +30,27 @@ public class Producto {
     private Integer stock;
 
     @ManyToOne
-    @JoinColumn(name = "id_categoria")
+    @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
 
-    @Column(nullable = false)
+    @NotBlank(message = "La marca es obligatoria")
     private String marca;
 
-    @Column(nullable = false)
-    private Date fecha_creacion;
+    @NotNull
+    @Column(name = "fecha_creacion", nullable = false, updatable = false)
+    private LocalDate fecha_creacion;
 
     @PrePersist
-    protected void asignarFechaCreacion() {
-        if(this.fecha_creacion == null) {
-            // Asignar la fecha actual si no se ha establecido
-            this.fecha_creacion = Date.valueOf(LocalDate.now());
-        }
-    }
+    protected void onCreate() {
+    this.fecha_creacion = LocalDate.now();
+}
     // Getters y setters
     public Long getId() {
-        return id_producto;
+        return id;
     }
 
     public void setId(Long id) {
-        this.id_producto = id;
+        this.id = id;
     }
 
     public String getNombre() {
@@ -100,7 +98,7 @@ public class Producto {
     public void setMarca(String marca) {
         this.marca = marca;
     }
-    public Date getFecha_creacion() {
+    public LocalDate getFecha_creacion() {
         return fecha_creacion;
     }
 }
