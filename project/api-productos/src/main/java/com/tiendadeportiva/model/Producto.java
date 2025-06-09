@@ -1,29 +1,33 @@
 package com.tiendadeportiva.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "productos")
 public class Producto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_producto;
 
-    @Column(nullable = false)
+    @NotBlank
     private String nombre;
 
-    @Column(nullable = false)
+    @NotBlank
     private String descripcion;
 
-    @Column(nullable = false)
-    private Double precio;
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = false)
+    private BigDecimal precio;
 
-    @Column(nullable = false)
-    @Min(value = 0, message = "El stock no puede ser negativo")
-    private int stock;
+    @NotNull
+    @Min(0)
+    private Integer stock;
 
     @ManyToOne
     @JoinColumn(name = "id_categoria")
@@ -35,42 +39,59 @@ public class Producto {
     @Column(nullable = false)
     private Date fecha_creacion;
 
-    public Producto(){}
-
-    public Long getId(){
+    @PrePersist
+    protected void asignarFechaCreacion() {
+        if(this.fecha_creacion == null) {
+            // Asignar la fecha actual si no se ha establecido
+            this.fecha_creacion = Date.valueOf(LocalDate.now());
+        }
+    }
+    // Getters y setters
+    public Long getId() {
         return id_producto;
     }
-    public void setId(Long id){
+
+    public void setId(Long id) {
         this.id_producto = id;
     }
-    public String getNombre(){
+
+    public String getNombre() {
         return nombre;
     }
-    public void setNombre(String nombre){
+
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public String getDescripcion(){
+
+    public String getDescripcion() {
         return descripcion;
     }
-    public void setDescripcion(String descripcion){
+
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    public Double getPrecio(){
+
+    public BigDecimal getPrecio() {
         return precio;
     }
-    public void setPrecio(Double precio){
+
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
-    public int getStock(){
+
+    public Integer getStock() {
         return stock;
     }
-    public void setStock(int stock){
+
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
-    public Categoria getCategoria(){
+
+    public Categoria getCategoria() {
         return categoria;
     }
-    public void setCategoria(Categoria categoria){
+
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
     public String getMarca() {
@@ -81,8 +102,5 @@ public class Producto {
     }
     public Date getFecha_creacion() {
         return fecha_creacion;
-    }
-    public void setFecha_creacion(Date fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
     }
 }

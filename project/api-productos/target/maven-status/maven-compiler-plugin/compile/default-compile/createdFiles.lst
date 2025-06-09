@@ -3,4 +3,6 @@ com\tiendadeportiva\model\Categoria.class
 com\tiendadeportiva\repository\ProductoRepository.class
 com\tiendadeportiva\ApiProductosApplication.class
 com\tiendadeportiva\controller\config\WebConfig.class
+com\tiendadeportiva\exception\GlobalExceptionHandler.class
+com\tiendadeportiva\controller\config\SwaggerConfig.class
 com\tiendadeportiva\model\Producto.class

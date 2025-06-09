@@ -2,5 +2,7 @@ C:\Users\Diego\Documents\GitHub\Practicas_Trendico\project\api-productos\src\mai
 C:\Users\Diego\Documents\GitHub\Practicas_Trendico\project\api-productos\src\main\java\com\tiendadeportiva\model\Categoria.java
 C:\Users\Diego\Documents\GitHub\Practicas_Trendico\project\api-productos\src\main\java\com\tiendadeportiva\controller\config\WebConfig.java
 C:\Users\Diego\Documents\GitHub\Practicas_Trendico\project\api-productos\src\main\java\com\tiendadeportiva\repository\ProductoRepository.java
+C:\Users\Diego\Documents\GitHub\Practicas_Trendico\project\api-productos\src\main\java\com\tiendadeportiva\exception\GlobalExceptionHandler.java
 C:\Users\Diego\Documents\GitHub\Practicas_Trendico\project\api-productos\src\main\java\com\tiendadeportiva\model\Producto.java
 C:\Users\Diego\Documents\GitHub\Practicas_Trendico\project\api-productos\src\main\java\com\tiendadeportiva\controller\ProductoController.java
+C:\Users\Diego\Documents\GitHub\Practicas_Trendico\project\api-productos\src\main\java\com\tiendadeportiva\controller\config\SwaggerConfig.java

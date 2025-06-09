@@ -14,6 +14,9 @@ public class Categoria {
 
     public Categoria() {}
 
+    public Categoria(Long id_categoria) {
+        this.id_categoria = id_categoria;
+    }
     public Long getId() {
         return id_categoria;
     }
