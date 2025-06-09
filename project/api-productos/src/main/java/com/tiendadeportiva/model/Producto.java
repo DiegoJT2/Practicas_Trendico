@@ -40,10 +40,14 @@ public class Producto {
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDate fecha_creacion;
 
+    @Column(name = "imagen")
+    private String imagen;
+
     @PrePersist
     protected void onCreate() {
-    this.fecha_creacion = LocalDate.now();
-}
+        this.fecha_creacion = LocalDate.now();
+    }
+
     // Getters y setters
     public Long getId() {
         return id;
@@ -100,5 +104,11 @@ public class Producto {
     }
     public LocalDate getFecha_creacion() {
         return fecha_creacion;
+    }
+    public String getImagen() {
+        return imagen;
+    }
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

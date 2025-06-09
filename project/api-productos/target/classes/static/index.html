@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico">
+  <title>Tienda Deportiva</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Tienda Deportiva</h1>
+    <div id="icono-carrito" class="cursor-pointer">
+      🛒 Carrito (<span id="contador-carrito">0</span>)
+    </div>
+  </header>
+
+  <main class="p-4">
+
+    <!-- Carrito -->
+    <section id="carrito" class="mt-8 hidden">
+      <h2 class="text-xl font-semibold mb-2">Mi Carrito</h2>
+      <ul id="lista-carrito" class="mb-4"></ul>
+      <p class="font-bold">Total: <span id="total">0.00€</span></p>
+    </section>
+
+    <!-- Productos -->
+    <section id="productos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <!-- Aquí se cargarán los productos -->
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center p-4 mt-10">
+    © 2025 Tienda Deportiva
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
