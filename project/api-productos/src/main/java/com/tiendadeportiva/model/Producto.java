@@ -3,6 +3,8 @@ package com.tiendadeportiva.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -36,8 +38,8 @@ public class Producto {
     @NotBlank(message = "La marca es obligatoria")
     private String marca;
 
-    @NotNull
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate fecha_creacion;
 
     @Column(name = "imagen")
