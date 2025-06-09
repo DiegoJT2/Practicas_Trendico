@@ -29,7 +29,7 @@ public class ProductoController {
         if (producto.getCategoria() != null && producto.getCategoria().getId() != null) {
             // Ok
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
 
         Producto nuevoProducto = productoRepository.save(producto);
@@ -76,6 +76,15 @@ public class ProductoController {
             return ResponseEntity.ok(stock);
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
+        if (productoRepository.existsById(id)) {
+            productoRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found si no existe
         }
     }
 }
