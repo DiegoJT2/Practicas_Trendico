@@ -67,17 +67,6 @@ public class ProductoController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/{id}/stock")
-    public ResponseEntity<Integer> obtenerStock(@PathVariable Long id) {
-        Optional<Producto> optionalProducto = productoRepository.findById(id);
-
-        if (optionalProducto.isPresent()) {
-            int stock = optionalProducto.get().getStock();
-            return ResponseEntity.ok(stock);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
         if (productoRepository.existsById(id)) {
