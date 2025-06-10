@@ -143,19 +143,24 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Actualizar stock",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"const requestBody = JSON.parse(pm.request.body.raw); // Captura el body enviado\r",
+							"const cantidad = requestBody.cantidad; // Extrae la cantidad\r",
+							"\r",
+							"const stockAnterior = parseInt(pm.environment.get(\"stockAnterior\"));\r",
+							"\r",
 							"pm.test(\"Código de estado es 200 - OK\", function () {\r",
 							"  pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"pm.test(\"El stock fue actualizado\", function () {\r",
-							"  const jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData).to.have.property(\"stock\");\r",
+							"pm.test(\"El stock fue actualizado correctamente\", function () {\r",
+							"  pm.expect(jsonData.stock).to.eql(stockAnterior + cantidad);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -164,11 +169,11 @@
 				}
 			],
 			"request": {
-				"method": "PATCH",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"stock\":105\r\n}",
+					"raw": "{\r\n    \"cantidad\":105\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -226,6 +231,43 @@
 						"api",
 						"productos",
 						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Métodos permitidos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Métodos permitidos presentes\", function () {\r",
+							"  pm.expect(pm.response.headers.get(\"Allow\")).to.include(\"GET\");\r",
+							"  pm.expect(pm.response.headers.get(\"Allow\")).to.include(\"POST\");\r",
+							"  pm.expect(pm.response.headers.get(\"Allow\")).to.include(\"PUT\");\r",
+							"  pm.expect(pm.response.headers.get(\"Allow\")).to.include(\"DELETE\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "OPTIONS",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/productos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"productos"
 					]
 				}
 			},

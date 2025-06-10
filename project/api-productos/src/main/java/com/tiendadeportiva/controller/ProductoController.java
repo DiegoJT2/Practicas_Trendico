@@ -49,19 +49,19 @@ public class ProductoController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    @PatchMapping("/{id}/stock")
-    public ResponseEntity<Producto> actualizarStock(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
-        Integer nuevoStock = body.get("stock");
-        if (nuevoStock == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return productoRepository.findById(id).map(producto -> {
+     @PutMapping("/{id}/stock")
+        public ResponseEntity<Producto> actualizarStock(
+            @PathVariable Long id,
+            @RequestBody Map<String, Integer> body
+        ) {
+            Producto producto = productoRepository.findById(id).orElseThrow();
+            int nuevoStock = producto.getStock() + body.get("cantidad");
+            if (nuevoStock < 0) {
+                return ResponseEntity.badRequest().build();
+            }
             producto.setStock(nuevoStock);
-            Producto actualizado = productoRepository.save(producto);
-            return ResponseEntity.ok(actualizado);
-        }).orElse(ResponseEntity.notFound().build());
-    }
+            return ResponseEntity.ok(productoRepository.save(producto));
+        }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
