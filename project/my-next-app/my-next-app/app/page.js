@@ -81,7 +81,7 @@ const ProductoCard = memo(function ProductoCard({ producto, onAdd }) {
         alt={producto.nombre}
         width={180}
         height={120}
-        className="rounded mb-2"
+        className="responsive-img rounded mb-2"
         priority
       />
       <h3 className="font-semibold text-lg">{producto.nombre}</h3>
@@ -180,7 +180,7 @@ export default function Page() {
                     alt={prod.nombre}
                     width={40}
                     height={40}
-                    className="rounded"
+                    className="responsive-img small rounded"
                   />
                   <span>{prod.nombre}</span>
                 </div>
@@ -254,7 +254,7 @@ export default function Page() {
                   alt={producto.nombre}
                   width={180}
                   height={120}
-                  className="rounded mb-2"
+                  className="responsive-img rounded mb-2"
                   priority={idx < 3}
                 />
                 <h3 className="font-semibold text-lg">{producto.nombre}</h3>
