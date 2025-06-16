@@ -22,17 +22,3 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
-
-img.responsive-img {
-  width: 180px;
-  height: auto;
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
-  object-fit: contain;
-}
-
-img.responsive-img.small {
-  width: 40px;
-  height: auto;
-  object-fit: contain;
-}

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo, memo, useId } from "react";
 import Image from "next/image";
 import { fetchProductos } from "./api/productosapi";
+import ProductoItem from "./components/ProductoItem";
 
 // Hook personalizado para el carrito
 function useCarrito() {
@@ -80,8 +81,8 @@ const ProductoCard = memo(function ProductoCard({ producto, onAdd }) {
         }
         alt={producto.nombre}
         width={180}
-        height={120}
-        className="responsive-img rounded mb-2"
+        height="auto"
+        className="rounded mb-2"
         priority
       />
       <h3 className="font-semibold text-lg">{producto.nombre}</h3>
@@ -159,6 +160,7 @@ export default function Page() {
           aria-live="polite"
         >
           <h2 className="text-xl font-semibold mb-2">Mi Carrito</h2>
+          {/* Reemplaza la lista del carrito */}
           <ul id="lista-carrito" className="mb-4">
             {carrito.length === 0 && (
               <li className="text-gray-500 dark:text-gray-300">
@@ -168,53 +170,17 @@ export default function Page() {
             {carrito.map((prod, idx) => (
               <li
                 key={`${prod.id_producto ?? prod.id}-${idUnico}`}
-                className="flex items-center justify-between mb-2"
+                className="mb-2"
               >
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={
-                      prod.imagen && prod.imagen.trim() !== ""
-                        ? `/img/${prod.imagen}`
-                        : "/img/default.webp"
-                    }
-                    alt={prod.nombre}
-                    width={40}
-                    height={40}
-                    className="responsive-img small rounded"
-                  />
-                  <span>{prod.nombre}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded transition hover:bg-blue-500 hover:text-white"
-                    aria-label={`Disminuir cantidad de ${prod.nombre}`}
-                    onClick={() =>
-                      cambiarCantidad(prod.id_producto ?? prod.id, -1)
-                    }
-                  >
-                    -
-                  </button>
-                  <span>{prod.cantidad}</span>
-                  <button
-                    className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded transition hover:bg-blue-500 hover:text-white"
-                    aria-label={`Aumentar cantidad de ${prod.nombre}`}
-                    onClick={() =>
-                      cambiarCantidad(prod.id_producto ?? prod.id, 1)
-                    }
-                  >
-                    +
-                  </button>
-                  <span className="font-bold">
-                    {(prod.precio * prod.cantidad).toFixed(2)}€
-                  </span>
-                  <button
-                    className="ml-2 text-red-600 font-bold transition hover:scale-125"
-                    aria-label={`Eliminar ${prod.nombre} del carrito`}
-                    onClick={() => eliminar(prod.id_producto ?? prod.id)}
-                  >
-                    ×
-                  </button>
-                </div>
+                <ProductoItem
+                  producto={prod}
+                  enCarrito
+                  cantidad={prod.cantidad}
+                  onRemove={() => eliminar(prod.id_producto ?? prod.id)}
+                  onChangeCantidad={(delta) =>
+                    cambiarCantidad(prod.id_producto ?? prod.id, delta)
+                  }
+                />
               </li>
             ))}
           </ul>
@@ -234,6 +200,7 @@ export default function Page() {
         )}
 
         {/* Productos */}
+        {/* Reemplaza la lista de productos */}
         <section
           id="productos"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
@@ -241,47 +208,23 @@ export default function Page() {
         >
           {!loading &&
             productos.map((producto, idx) => (
-              <div
+              <ProductoItem
                 key={`${producto.id_producto ?? producto.id}-${idUnico}`}
-                className="bg-white dark:bg-gray-700 rounded shadow p-4 flex flex-col items-center transition hover:scale-105"
-              >
-                <Image
-                  src={
-                    producto.imagen && producto.imagen.trim() !== ""
-                      ? `/img/${producto.imagen}`
-                      : "/img/default.webp"
+                producto={producto}
+                onAdd={() => {
+                  // Validar stock antes de agregar
+                  const enCarrito = carrito.find(
+                    (p) => (p.id_producto ?? p.id) === (producto.id_producto ?? producto.id)
+                  );
+                  const cantidadEnCarrito = enCarrito ? enCarrito.cantidad : 0;
+                  if (producto.stock !== undefined && cantidadEnCarrito >= producto.stock) {
+                    showToast("No queda stock disponible", "error");
+                    return;
                   }
-                  alt={producto.nombre}
-                  width={180}
-                  height={120}
-                  className="responsive-img rounded mb-2"
-                  priority={idx < 3}
-                />
-                <h3 className="font-semibold text-lg">{producto.nombre}</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  {producto.descripcion}
-                </p>
-                <p className="font-bold mb-2">{producto.precio}€</p>
-                <button
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  onClick={() => {
-                    // Validar stock antes de agregar
-                    const enCarrito = carrito.find(
-                      (p) => (p.id_producto ?? p.id) === (producto.id_producto ?? producto.id)
-                    );
-                    const cantidadEnCarrito = enCarrito ? enCarrito.cantidad : 0;
-                    if (producto.stock !== undefined && cantidadEnCarrito >= producto.stock) {
-                      showToast("No queda stock disponible", "error");
-                      return;
-                    }
-                    agregar(producto);
-                    showToast("Producto añadido al carrito");
-                  }}
-                  aria-label={`Añadir ${producto.nombre} al carrito`}
-                >
-                  Añadir al carrito
-                </button>
-              </div>
+                  agregar(producto);
+                  showToast("Producto añadido al carrito");
+                }}
+              />
             ))}
         </section>
       </main>
