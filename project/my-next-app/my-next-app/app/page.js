@@ -265,6 +265,15 @@ export default function Page() {
                 <button
                   className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
                   onClick={() => {
+                    // Validar stock antes de agregar
+                    const enCarrito = carrito.find(
+                      (p) => (p.id_producto ?? p.id) === (producto.id_producto ?? producto.id)
+                    );
+                    const cantidadEnCarrito = enCarrito ? enCarrito.cantidad : 0;
+                    if (producto.stock !== undefined && cantidadEnCarrito >= producto.stock) {
+                      showToast("No queda stock disponible", "error");
+                      return;
+                    }
                     agregar(producto);
                     showToast("Producto añadido al carrito");
                   }}
