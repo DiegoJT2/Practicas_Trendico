@@ -1,5 +1,9 @@
+// Cache simple en memoria
+let productosCache = null;
+let cacheTimestamp = 0;
+const CACHE_DURATION = 1000 * 30; // 30 segundos
+
 export async function fetchProductos(force = false) {
-  // Añadir cacheo simple en memoria para evitar llamadas repetidas en la misma sesión (opcional)
   if (!force && productosCache && Date.now() - cacheTimestamp < CACHE_DURATION) {
     return productosCache;
   }
@@ -56,27 +60,17 @@ export async function eliminarProducto(id) {
   return res.json();
 }
 
-// Sugerencias adicionales para optimización y robustez:
-
-// 1. Manejo de errores más detallado
-function parseError(res, defaultMsg) {
-  return res.json().then(
-    (data) => data?.error || defaultMsg,
-    () => defaultMsg
-  );
+// Manejo de errores más detallado
+async function parseError(res, defaultMsg) {
+  try {
+    const data = await res.json();
+    return data?.error || defaultMsg;
+  } catch {
+    return defaultMsg;
+  }
 }
 
-// 2. Validación de parámetros antes de enviar peticiones
-
-// 3. Mejor manejo de errores en fetch
-
-// Utilidad para limpiar el cache si se necesita desde fuera
 export function limpiarCacheProductos() {
   productosCache = null;
   cacheTimestamp = 0;
 }
-
-// Añadir cacheo simple en memoria para evitar llamadas repetidas en la misma sesión (opcional)
-let productosCache = null;
-let cacheTimestamp = 0;
-const CACHE_DURATION = 1000 * 30; // 30 segundos

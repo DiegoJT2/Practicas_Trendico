@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo, memo, useId } from "react";
-import Image from "next/image";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { fetchProductos } from "./api/productosapi";
 import ProductoItem from "./components/ProductoItem";
 
@@ -52,13 +51,21 @@ function useCarrito() {
 // Hook para toasts
 function useToast() {
   const [toast, setToast] = useState(null);
-  const showToast = (msg, type = "success") => {
+  const timeoutRef = React.useRef();
+
+  const showToast = useCallback((msg, type = "success") => {
     setToast({ msg, type });
-    setTimeout(() => setToast(null), 2500);
-  };
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setToast(null), 2500);
+  }, []);
+
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
+
   const Toast = toast ? (
     <div
-      className={`fixed top-6 right-6 z-50 px-4 py-2 rounded shadow-lg text-white transition-all duration-300 ${
+      className={`fixed bottom-6 right-6 z-50 px-4 py-2 rounded shadow-lg text-white transition-all duration-300 ${
         toast.type === "error" ? "bg-red-500" : "bg-green-500"
       }`}
       role="alert"
@@ -70,44 +77,12 @@ function useToast() {
   return [Toast, showToast];
 }
 
-const ProductoCard = memo(function ProductoCard({ producto, onAdd }) {
-  return (
-    <div className="bg-white dark:bg-gray-700 rounded shadow p-4 flex flex-col items-center transition hover:scale-105">
-      <Image
-        src={
-          producto.imagen && producto.imagen.trim() !== ""
-            ? `/img/${producto.imagen}`
-            : "/img/default.webp"
-        }
-        alt={producto.nombre}
-        width={180}
-        height="auto"
-        className="rounded mb-2"
-        priority
-      />
-      <h3 className="font-semibold text-lg">{producto.nombre}</h3>
-      <p className="text-gray-600 dark:text-gray-300">
-        {producto.descripcion}
-      </p>
-      <p className="font-bold mb-2">{producto.precio}€</p>
-      <button
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
-        onClick={() => onAdd(producto)}
-        aria-label={`Añadir ${producto.nombre} al carrito`}
-      >
-        Añadir al carrito
-      </button>
-    </div>
-  );
-});
-
 export default function Page() {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
   const { carrito, agregar, eliminar, cambiarCantidad } = useCarrito();
   const [Toast, showToast] = useToast();
-  const idUnico = useId();
 
   useEffect(() => {
     setLoading(true);
@@ -126,6 +101,34 @@ export default function Page() {
     () => carrito.reduce((acc, p) => acc + p.cantidad, 0),
     [carrito]
   );
+
+  // Memoiza la función para evitar renders innecesarios
+  const handleAddProducto = useCallback(
+    (producto) => {
+      const productoId = producto.id_producto ?? producto.id;
+      const enCarrito = carrito.find(
+        (p) => (p.id_producto ?? p.id) === productoId
+      );
+      const cantidadEnCarrito = enCarrito ? enCarrito.cantidad : 0;
+      if (producto.stock !== undefined && cantidadEnCarrito >= producto.stock) {
+        showToast("No queda stock disponible", "error");
+        return;
+      }
+      agregar(producto);
+      // Mueve el toast a un efecto para que se muestre después de actualizar el carrito
+      // showToast("Producto añadido al carrito");
+    },
+    [carrito, agregar, showToast]
+  );
+
+  // Añade este efecto para mostrar el toast solo cuando cambia el carrito
+  useEffect(() => {
+    if (carrito.length > 0) {
+      // Opcional: puedes refinar esto si quieres evitar mostrar el toast en la carga inicial
+      showToast("Producto añadido al carrito");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [carrito]);
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 min-h-screen flex flex-col antialiased">
@@ -160,16 +163,15 @@ export default function Page() {
           aria-live="polite"
         >
           <h2 className="text-xl font-semibold mb-2">Mi Carrito</h2>
-          {/* Reemplaza la lista del carrito */}
           <ul id="lista-carrito" className="mb-4">
             {carrito.length === 0 && (
               <li className="text-gray-500 dark:text-gray-300">
                 El carrito está vacío.
               </li>
             )}
-            {carrito.map((prod, idx) => (
+            {carrito.map((prod) => (
               <li
-                key={`${prod.id_producto ?? prod.id}-${idUnico}`}
+                key={prod.id_producto ?? prod.id}
                 className="mb-2"
               >
                 <ProductoItem
@@ -200,30 +202,17 @@ export default function Page() {
         )}
 
         {/* Productos */}
-        {/* Reemplaza la lista de productos */}
         <section
           id="productos"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
           aria-label="Lista de productos"
         >
           {!loading &&
-            productos.map((producto, idx) => (
+            productos.map((producto) => (
               <ProductoItem
-                key={`${producto.id_producto ?? producto.id}-${idUnico}`}
+                key={producto.id_producto ?? producto.id}
                 producto={producto}
-                onAdd={() => {
-                  // Validar stock antes de agregar
-                  const enCarrito = carrito.find(
-                    (p) => (p.id_producto ?? p.id) === (producto.id_producto ?? producto.id)
-                  );
-                  const cantidadEnCarrito = enCarrito ? enCarrito.cantidad : 0;
-                  if (producto.stock !== undefined && cantidadEnCarrito >= producto.stock) {
-                    showToast("No queda stock disponible", "error");
-                    return;
-                  }
-                  agregar(producto);
-                  showToast("Producto añadido al carrito");
-                }}
+                onAdd={() => handleAddProducto(producto)}
               />
             ))}
         </section>

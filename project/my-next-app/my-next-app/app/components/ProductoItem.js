@@ -25,9 +25,10 @@ export default function ProductoItem({ producto, enCarrito = false, cantidad = 1
         {enCarrito ? (
           <div className="flex items-center gap-2">
             <button
-              className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded transition hover:bg-blue-500 hover:text-white"
+              className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded transition hover:bg-blue-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label={`Disminuir cantidad de ${producto.nombre}`}
               onClick={onChangeCantidad ? () => onChangeCantidad(-1) : undefined}
+              disabled={cantidad === 1}
             >
               -
             </button>
